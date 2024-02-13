@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
         public EnemyTypesEnum Type;
         public GameObject Body;
         public float Speed;
+        public float Damage;
     }
     [SerializeField]
     EnemySettingsStruc[] enemySettingsArray;
@@ -25,16 +26,17 @@ public class Enemy : MonoBehaviour
     public void Set(EnemyTypesEnum type, Vector3 worldPos, Transform target)
     {
         currentSettings = enemySettingsArray.FirstOrDefault(x => x.Type == type);
-        foreach (var body in enemySettingsArray.Select(x => x.Body))
+        foreach (var enemy in enemySettingsArray.Select(x => x.Body))
         {
-            body.gameObject.SetActive(body == currentSettings.Body);
+            enemy.gameObject.SetActive(enemy == currentSettings.Body);
         }
         transform.position = worldPos;
         currenttarget = target;
+        gameObject.SetActive(true);
     }
     private void Update()
     {
-        if (currentSettings.Speed > 0 && currenttarget != null)
+        if (gameObject.activeSelf && currentSettings.Speed > 0 && currenttarget != null)
         {
             // Calculate the direction to the target
             Vector3 direction = currenttarget.position - transform.position;
@@ -49,6 +51,14 @@ public class Enemy : MonoBehaviour
                 Quaternion toRotation = Quaternion.LookRotation(direction, Vector3.up);
                 transform.rotation = toRotation;
             }
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 6)
+        {
+            BaseEvent.CallTowerHitWithDamage(currentSettings.Damage);
+            gameObject.SetActive(false);
         }
     }
 }

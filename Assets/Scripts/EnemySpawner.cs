@@ -31,26 +31,35 @@ public class EnemySpawner : MonoBehaviour
         enemiesPoolArray = new Enemy[10];
         for (int i = 0; i < enemiesPoolArray.Length; i++)
         {
-            enemiesPoolArray[i] = Instantiate(EnemyPrefab);
+            Enemy enemy = Instantiate(EnemyPrefab);
+            enemiesPoolArray[i] = enemy;
+            enemy.gameObject.SetActive(false);
         }
         StartCoroutine(Counter());
         StartCoroutine(Spawning());
     }
     IEnumerator Counter()
     {
-        while (true)
+        while (currentPlayTime < levelDuration)
         {
             yield return new WaitForSecondsRealtime(1);
             currentPlayTime++;
         }
+
+
     }
     IEnumerator Spawning()
     {
-        while (true)
+        while (currentPlayTime < levelDuration)
         {
             currentEnemy = enemiesPoolArray[currentEnemyIndex];
             currentEnemyType = typesArray[UnityEngine.Random.Range(0, typesArray.Count)];
-            var newListOfPoints = spawningPosArray.Where(x => Vector3.Distance(x.position, currnetSpawnPos) > distanceFromLastSpawningPoint && enemiesPoolArray.All(y => Vector3.Distance(x.position, y.transform.position) > distanceFromLastSpawningPoint)).Select(x => x.position).ToArray();
+
+            // Filter spawning positions based on distance from the current spawn position and the distance from existing enemy positions
+            var newListOfPoints = spawningPosArray.Where(x => Vector3.Distance(x.position, currnetSpawnPos) > distanceFromLastSpawningPoint 
+            && enemiesPoolArray.All(y => Vector3.Distance(x.position, y.transform.position) > distanceFromLastSpawningPoint))
+                .Select(x => x.position).ToArray();
+
             if (newListOfPoints.Length > 0)
             {
 

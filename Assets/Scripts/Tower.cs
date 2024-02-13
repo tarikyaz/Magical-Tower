@@ -1,18 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public float CurrentDamage { get; private set; }
+    
+    private void Start()
     {
-        
+        CurrentDamage = 100;
     }
-
-    // Update is called once per frame
-    void Update()
+    public void TakeDamage(float damage)
     {
-        
+        CurrentDamage -= damage;
+        Debug.Log("CurrentDamage " + CurrentDamage);
+        if (CurrentDamage <= 0)
+        {
+            BaseEvent.CallLevelFinish(false);
+            CurrentDamage = 0;
+        }
+        BaseEvent.CallTowerDamageChange(CurrentDamage);
     }
 }
