@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 
 public class Enemy : MonoBehaviour
@@ -22,9 +21,24 @@ public class Enemy : MonoBehaviour
     EnemySettingsStruc[] enemySettingsArray;
     EnemySettingsStruc currentSettings;
     Transform currentTarget;
+    float damage;
+    public void TakeDamage(float damage)
+    {
+        this.damage -= damage;
+        if (this.damage <= 0)
+        {
+            Kill();
+        }
+    }
+
+    public void Kill()
+    {
+        gameObject.SetActive(false);
+    }
 
     public void Set(EnemyTypesEnum type, Vector3 worldPos, Transform target)
     {
+        damage = 100;
         currentSettings = enemySettingsArray.FirstOrDefault(x => x.Type == type);
         foreach (var bodies in enemySettingsArray.Select(x => x.Body))
         {
@@ -57,7 +71,7 @@ public class Enemy : MonoBehaviour
                 Quaternion toRotation = Quaternion.LookRotation(direction, Vector3.up);
                 transform.rotation = toRotation;
             }
-            
+
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -65,7 +79,8 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.layer == 6)
         {
             BaseEvent.CallTowerHitWithDamage(currentSettings.Damage);
-            gameObject.SetActive(false);
+            Kill();
         }
+
     }
 }

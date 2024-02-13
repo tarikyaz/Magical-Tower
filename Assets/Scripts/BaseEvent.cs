@@ -7,7 +7,7 @@ public static class BaseEvent
 
     internal static void CallLevelFinish(bool v)
     {
-        
+
     }
 
     internal static void CallTowerDamageChange(float currentDamage)

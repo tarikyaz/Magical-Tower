@@ -1,14 +1,15 @@
 using UnityEngine;
 
-public class FireBall : Spell
+public class BarrageObj : MonoBehaviour
 {
-    [SerializeField] float damageArea = 3;
-    [SerializeField] float speed = 4;
+    float damageArea = 5;
     Vector3 targetPos;
-    public override void Set(Enemy[] enemies)
+    float speed;
+    public void Set(Vector3 targetPos, float speed, float damageArea)
     {
-        base.Set(enemies);
-        targetPos = enemiesPosArray[UnityEngine.Random.Range(0, enemiesPosArray.Length)];
+        this.targetPos = targetPos;
+        this.speed = speed;
+        this.damageArea = damageArea;
     }
 
     private void FixedUpdate()

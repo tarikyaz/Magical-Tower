@@ -1,18 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Barrage : MonoBehaviour
+public class Barrage : Spell
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] float speed = 10, damageArea = 5;
+    [SerializeField] BarrageObj barrageObjPrefab;
+    public override void Set(Enemy[] enemies)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.Set(enemies);
+        for (int i = 0; i < enemiesPosArray.Length; i++)
+        {
+            BarrageObj newObj = Instantiate(barrageObjPrefab, transform);
+            newObj.gameObject.SetActive(true);
+            newObj.Set(enemiesPosArray[i], speed, damageArea);
+        }
     }
 }

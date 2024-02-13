@@ -21,17 +21,16 @@ public class EnemySpawner : MonoBehaviour
     Enemy currentEnemy;
     Vector3 currnetSpawnPos;
     List<Enemy.EnemyTypesEnum> typesArray = new List<Enemy.EnemyTypesEnum>();
-    public bool GetRandomActiveEnemy(out Enemy enemy)
+    public bool GetActiveActiveEnemies(out Enemy[] enemies)
     {
-        var listOfActiveEnemies = enemiesPoolArray.Where(x => x.gameObject.activeSelf).ToArray();
-        if (listOfActiveEnemies.Length <= 0)
+        enemies = enemiesPoolArray.Where(x => x.gameObject.activeSelf).ToArray();
+        if (enemies.Length <= 0)
         {
-            enemy = null;
+            enemies = null;
             return false;
         }
         else
         {
-            enemy = listOfActiveEnemies[UnityEngine.Random.Range(0, listOfActiveEnemies.Length)];
             return true;
         }
     }
@@ -70,7 +69,7 @@ public class EnemySpawner : MonoBehaviour
             currentEnemyType = typesArray[UnityEngine.Random.Range(0, typesArray.Count)];
 
             // Filter spawning positions based on distance from the current spawn position and the distance from existing enemy positions
-            var newListOfPoints = spawningPosArray.Where(x => Vector3.Distance(x.position, currnetSpawnPos) > distanceFromLastSpawningPoint 
+            var newListOfPoints = spawningPosArray.Where(x => Vector3.Distance(x.position, currnetSpawnPos) > distanceFromLastSpawningPoint
             && enemiesPoolArray.All(y => Vector3.Distance(x.position, y.transform.position) > distanceFromLastSpawningPoint))
                 .Select(x => x.position).ToArray();
 

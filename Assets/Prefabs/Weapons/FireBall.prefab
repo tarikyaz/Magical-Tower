@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1824002841859614225}
   - component: {fileID: 396379806868473501}
   - component: {fileID: 8127997468578258532}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bd9fb182794ec24c93c17e7c7d105c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageArea: 5
+  damageArea: 7
   speed: 25
 --- !u!54 &8127997468578258532
 Rigidbody:

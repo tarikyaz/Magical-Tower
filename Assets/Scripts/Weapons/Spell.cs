@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Spell : MonoBehaviour
 {
-    protected Vector3 targetPos;
-    public virtual void Set(Enemy enemy)
+    protected Vector3[] enemiesPosArray;
+    public virtual void Set(Enemy[] enemies)
     {
-        targetPos = enemy.transform.position;
+        enemiesPosArray = enemies.Select(x => x.transform.position).ToArray();
     }
 }

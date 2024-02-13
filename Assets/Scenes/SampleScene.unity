@@ -283,8 +283,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyPrefab: {fileID: 4854011365079015331, guid: 18937a712c5254248a4ada94ec394962, type: 3}
   EnemiesMaxPoolCount: 30
-  minSpawnDelay: 1
-  maxSpawnDelay: 3
+  minSpawnDelay: 0.25
+  maxSpawnDelay: 2
   spawningPosArray:
   - {fileID: 272252850}
   - {fileID: 1285489911}
@@ -1508,8 +1508,8 @@ MonoBehaviour:
     CooldownDuration: 3
     Prefab: {fileID: 396379806868473501, guid: 0f7968c65c5098e45bca2e141055ad2b, type: 3}
   barrage_Spell:
-    CooldownDuration: 0
-    Prefab: {fileID: 0}
+    CooldownDuration: 1
+    Prefab: {fileID: 2150925965787043047, guid: e344df60a77a1e94382467808460107b, type: 3}
 --- !u!54 &1490259917
 Rigidbody:
   m_ObjectHideFlags: 0
