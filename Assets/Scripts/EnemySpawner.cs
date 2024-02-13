@@ -21,6 +21,20 @@ public class EnemySpawner : MonoBehaviour
     Enemy currentEnemy;
     Vector3 currnetSpawnPos;
     List<Enemy.EnemyTypesEnum> typesArray = new List<Enemy.EnemyTypesEnum>();
+    public bool GetRandomActiveEnemy(out Enemy enemy)
+    {
+        var listOfActiveEnemies = enemiesPoolArray.Where(x => x.gameObject.activeSelf).ToArray();
+        if (listOfActiveEnemies.Length <= 0)
+        {
+            enemy = null;
+            return false;
+        }
+        else
+        {
+            enemy = listOfActiveEnemies[UnityEngine.Random.Range(0, listOfActiveEnemies.Length)];
+            return true;
+        }
+    }
     void Start()
     {
         var allTypes = Enum.GetValues(typeof(Enemy.EnemyTypesEnum));
@@ -28,7 +42,7 @@ public class EnemySpawner : MonoBehaviour
         {
             typesArray.Add((Enemy.EnemyTypesEnum)allTypes.GetValue(i));
         }
-        enemiesPoolArray = new Enemy[10];
+        enemiesPoolArray = new Enemy[EnemiesMaxPoolCount];
         for (int i = 0; i < enemiesPoolArray.Length; i++)
         {
             Enemy enemy = Instantiate(EnemyPrefab);

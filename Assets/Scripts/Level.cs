@@ -6,6 +6,7 @@ using UnityEngine;
 public class Level : Singleton<Level>
 {
     public Tower Tower;
+    public EnemySpawner EnemySpawner;
     private void OnEnable()
     {
         BaseEvent.OnTowerHit += OnTowerHitHandler;
