@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -8,12 +9,13 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] Enemy EnemyPrefab;
     [SerializeField] int EnemiesMaxPoolCount = 10;
-    [SerializeField] float minSpawnDelay  = 3, maxSpawnDelay = 10;
+    [SerializeField] float minSpawnDelay = 3, maxSpawnDelay = 10;
     [SerializeField] Transform[] spawningPosArray;
     [SerializeField] float levelDuration = 10;
+    [SerializeField] float distanceFromLastSpawningPoint = 3;
     Enemy[] enemiesPoolArray;
     float currentPlayTime = 0;
-    float currentSpawnDelay => Mathf.Lerp(maxSpawnDelay, minSpawnDelay , Mathf.InverseLerp(0 , levelDuration ,currentPlayTime));
+    float currentSpawnDelay => Mathf.Lerp(maxSpawnDelay, minSpawnDelay, Mathf.InverseLerp(0, levelDuration, currentPlayTime));
     int currentEnemyIndex = 0;
     Enemy.EnemyTypesEnum currentEnemyType;
     Enemy currentEnemy;
@@ -48,17 +50,22 @@ public class EnemySpawner : MonoBehaviour
         {
             currentEnemy = enemiesPoolArray[currentEnemyIndex];
             currentEnemyType = typesArray[UnityEngine.Random.Range(0, typesArray.Count)];
-            currnetSpawnPos = spawningPosArray[UnityEngine.Random.Range(0, spawningPosArray.Length)].position;
-            currentEnemyIndex++;
-            if (currentEnemyIndex >= enemiesPoolArray.Length)
+            var newListOfPoints = spawningPosArray.Where(x => Vector3.Distance(x.position, currnetSpawnPos) > distanceFromLastSpawningPoint && enemiesPoolArray.All(y => Vector3.Distance(x.position, y.transform.position) > distanceFromLastSpawningPoint)).Select(x => x.position).ToArray();
+            if (newListOfPoints.Length > 0)
             {
-                currentEnemyIndex = 0;
-            }
-            float currnetDelay = currentSpawnDelay;
-            Debug.Log("currentSpawnDelay " + currnetDelay);
-            yield return new WaitForSeconds(currnetDelay);
 
-            currentEnemy.Set(currentEnemyType, currnetSpawnPos, Level.Instance.Tower.transform);
+                currnetSpawnPos = newListOfPoints[UnityEngine.Random.Range(0, newListOfPoints.Count())];
+                currentEnemyIndex++;
+                if (currentEnemyIndex >= enemiesPoolArray.Length)
+                {
+                    currentEnemyIndex = 0;
+                }
+                float currnetDelay = currentSpawnDelay;
+                Debug.Log("currentSpawnDelay " + currnetDelay);
+                yield return new WaitForSeconds(currnetDelay);
+
+                currentEnemy.Set(currentEnemyType, currnetSpawnPos, Level.Instance.Tower.transform);
+            }
         }
     }
 }
